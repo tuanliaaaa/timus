@@ -1,0 +1,52 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+  <!-- shop section -->
+  <section class="shop_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>
+          Latest Watches
+        </h2>
+      </div>
+      <div class="row">
+        {% for watch in list_watch%}
+        <div class="col-md-6 col-xl-3">
+         
+          <div class="box">
+            <a href="{% url 'singerProduct' watch.id %}">
+              <div class="img-box">
+                <img src="{{watch.imgs.0}}" alt="">
+              </div>
+              <div class="detail-box">
+                <h6>
+                  {{watch.ProductName}}
+                </h6>
+                <h6>
+                  Price:
+                  <span>
+                    ${{watch.price}}
+                  </span>
+                </h6>
+              </div>
+              <div class="new">
+                <span>
+                  Featured
+                </span>
+              </div>
+            </a>
+          </div>
+         
+        </div>
+        {% endfor %}
+    </div>
+    <div class="btn-box">
+          <a href="../watches/showAll">
+           View More
+          </a>
+      </div>
+  </section>
+{% endblock %}
+{% block contents %}
+{% endblock %}
+

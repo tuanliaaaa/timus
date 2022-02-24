@@ -1,0 +1,95 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block content %}
+{% if not unpip %}
+    <!-- single product -->
+	{% if ok  %}
+	{% else %}
+		<div id='bug' style='border: 1px solid #ccc;
+		margin-top: 20px;'>
+			<h1 style='color:red;font-size:23px;text-align:center'> Số lượng mua vượt quá số lượng trong kho vui lòng nhập lại.</h1>
+		</div>
+	{% endif %}
+	<div class="single-product mt-150 mb-150">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-5">
+					<div class="single-product-img">
+						<img id="oke" src="{{ims.0}}" alt="">
+					</div>
+				</div>
+				<div class="col-md-7">
+					<div class="single-product-content">
+						<h3>{{singerProduct.ProductName}}</h3>
+						<p class="single-product-pricing"> ${{singerProduct.price}}</p>
+						<p><span>Stock:</span>
+							{{singerProduct.stock}}
+						</p>
+						<p>{{singerProduct.describe}}</p>
+						<div class="single-product-form">
+							<form action="" method=POST>
+								{% csrf_token %}
+								<input type="text" placeholder="0" name="quantily" style="width: 60px;">
+								{% if ok %}
+								<input type="text" placeholder="UserName" name="UserName" style="width: 160px;">
+								<input type="text" placeholder="sex" name="Sex" style="width: 60px;">
+								<input type="text" placeholder="Number" name="Number" style="width: 120px;">
+								<input type="text" placeholder="email" name="email" style="width: 200px;">  
+								{% else %}
+								<input type="text" value="{{UserName}}" name="UserName" style="width: 160px;">
+								<input type="text" value="{{Sex}}"  name="Sex" style="width: 60px;">
+								<input type="text" value="{{Number}}"  name="Number" style="width: 120px;">
+								<input type="text" value="{{email}}"  name="email" style="width: 200px;">
+								{% endif %}
+								<div style="display: flex;margin-top: 20px;">
+									<input class="cart-btn" style="margin: auto;" type="submit" value=" Buy Now">
+								</div>
+								
+							</form>
+							
+						</div>
+						
+		
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end single product -->
+
+	<!-- more picture -->
+	<div class="more-products mb-150">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-4 col-md-6 text-center">
+					<div class="single-product-item">
+						<div class="product-image">
+							<img id="okes" src="{{ims.1}}" alt="">
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6 text-center">
+					<div class="single-product-item">
+						<div class="product-image">
+							<img id="okes" src="{{ims.2}}" alt="">
+						</div>	
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-6 offset-lg-0 offset-md-3 text-center">
+					<div class="single-product-item">
+						<div class="product-image">
+							<img id="okes" src="{{ims.3}}" alt="">
+						</div>				
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end more picture -->
+{% else %}
+<div style="min-height: 500px;display: flex;">
+	<p style="font-size: 70px;margin: auto;text-align: center;">{{unpip}}
+
+	</p></div>
+{% endif %}
+{% endblock %}
