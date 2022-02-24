@@ -15,6 +15,7 @@ def Login(request):
         return HttpResponseRedirect(reverse('home',))
 
     else:
+        
         return render(request,'login.html')
 def Logout(request):
     logout(request)

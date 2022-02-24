@@ -63,10 +63,11 @@
 
                 </ul>
                 <div class="user_option-box">
-                  
+                  {% if user.is_authenticated %}
                   <a href="{%  url 'card' %}">
                     <i class="fa fa-cart-plus" aria-hidden="true"></i>
                   <a>
+                  {% endif %}
                   <div class="box" >
                   <form name="search" action="{% url 'watch' %}" method="GET">
                       <input type="text" class="input" name="search" 
@@ -80,10 +81,15 @@
                     <img  style="border-radius: 50%;" src="https://scontent.fsgn2-1.fna.fbcdn.net/v/t39.30808-6/272807867_669874974031082_8247604913488167459_n.jpg?_nc_cat=111&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=mc5XLpoJmFEAX90NQ86&tn=wj7CHe713iSc7nnB&_nc_ht=scontent.fsgn2-1.fna&oh=00_AT8hVVILKzN2RB8cxPqYlLP7VN2hXFVTkY5MAR3S40RdgQ&oe=621BCEB2"> 
                     <a href="{% url 'logout' %}" style="font-size: 13px;margin-left: -2px;font-weight: 900;font-family: -webkit-pictograph;">Logout</a>
                   </div>  
+                  <div style="cursor: pointer;margin-top: -9px;">
+                    <a href="{%url 'AddProduct' %}">
+
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                    </a>
+                  </div>
                   {% else %}
                   <div style="display:inline-block;margin-left: 15px;">
-
-                    <a style="font-size: 13px;margin-left: -2px;font-weight: 600;" href="{% url 'login' %}">login</a>
+                    <a href="{% url 'login' %}" style="display: inline-block; font-weight: 600; margin-bottom: 10px;">login</a>
                   </div>
                   {% endif %}
 

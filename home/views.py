@@ -1,5 +1,4 @@
 from http.client import HTTPResponse
-import re
 from django.shortcuts import render
 from django.http.response import HttpResponse, HttpResponseRedirect
 from .models import Product,Buy,Users
@@ -63,6 +62,7 @@ def singerProduct(request,id):
         return HttpResponseRedirect(reverse('card',))
     return render(request,'home/singerProduct.html',{'singerProduct':list_singerProduct,'ims':a,'ok':ok})
 def showAll(request):
+    
     list_watch = Product.objects.all()
     for i in list_watch:
         a = i.img.split(',')
@@ -91,3 +91,16 @@ def EditProduct(request,id):
         list_singerProduct.save()
         return HttpResponseRedirect(reverse('singerProduct',args=(id,)))
     return render(request,'EditProduct.html',{'list_singerProduct':list_singerProduct})
+@decorators.login_required(login_url='login')
+def AddProduct(request):
+    if request.POST:
+        ProductName =request.POST['ProductName']
+        ProductCode = request.POST['ProductCode']
+        price = request.POST['price']
+        stock = request.POST['stock']
+        describe = request.POST['describe']
+        img = request.POST['img']
+        a = Product(ProductName=ProductName,ProductCode=ProductCode,price=price,stock=stock,describe=describe,img=img)
+        a.save()
+        return HttpResponseRedirect(reverse('singerProduct',args=(a.id,)))
+    return render(request,'home/AddProduct.html')
