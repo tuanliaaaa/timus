@@ -3,13 +3,6 @@
 {% block content %}
 {% if not unpip %}
     <!-- single product -->
-	{% if ok  %}
-	{% else %}
-		<div id='bug' style='border: 1px solid #ccc;
-		margin-top: 20px;'>
-			<h1 style='color:red;font-size:23px;text-align:center'> Số lượng mua vượt quá số lượng trong kho vui lòng nhập lại.</h1>
-		</div>
-	{% endif %}
 	<div class="single-product mt-150 mb-150">
 		<div class="container">
 			<div class="row">
@@ -20,27 +13,37 @@
 				</div>
 				<div class="col-md-7">
 					<div class="single-product-content">
-						<h3>{{singerProduct.ProductName}}</h3>
+						<div style="margin-top: 10px;">
+							<h3 style="display: inline-block;">{{singerProduct.ProductName}}</h3>
+							{% if user.is_authenticated %}
+							<div style="float: right;">
+								<a href="{% url 'EditProduct' singerProduct.id %}">
+
+									<input   type="button" style="margin-right: 10px;border-style: none;background-color: #F28123;font-weight: 700;text-transform: uppercase;font-size: 15px; border-radius: 25px; padding: 0 10px;" value="edit">
+								</a>
+								<a href="{% url 'DeleteProduct' singerProduct.id %}">
+
+								<input  type="button" style="border-style: none;background-color: #F28123;font-weight: 700;text-transform: uppercase;font-size: 15px; border-radius: 25px;" value="delete">
+								</a>
+							</div>
+							{% endif %}
+						</div>
 						<p class="single-product-pricing"> ${{singerProduct.price}}</p>
 						<p><span>Stock:</span>
 							{{singerProduct.stock}}
 						</p>
 						<p>{{singerProduct.describe}}</p>
+					
 						<div class="single-product-form">
 							<form action="" method=POST>
 								{% csrf_token %}
-								<input type="text" placeholder="0" name="quantily" style="width: 60px;">
-								{% if ok %}
-								<input type="text" placeholder="UserName" name="UserName" style="width: 160px;">
-								<input type="text" placeholder="sex" name="Sex" style="width: 60px;">
-								<input type="text" placeholder="Number" name="Number" style="width: 120px;">
-								<input type="text" placeholder="email" name="email" style="width: 200px;">  
-								{% else %}
-								<input type="text" value="{{UserName}}" name="UserName" style="width: 160px;">
-								<input type="text" value="{{Sex}}"  name="Sex" style="width: 60px;">
-								<input type="text" value="{{Number}}"  name="Number" style="width: 120px;">
-								<input type="text" value="{{email}}"  name="email" style="width: 200px;">
-								{% endif %}
+								<input type="text" placeholder="0" name="quantily" style="width: 60px;"pattern="[1-9]" title="Vui lòng nhập số lượng sản phẩm lớn hơn 0" required>
+								
+								<input type="text" placeholder="UserName" name="UserName" style="width: 160px;" required >
+								<input type="text" placeholder="sex" name="Sex" style="width: 60px;" required>
+								<input type="text" placeholder="Number" name="Number" style="width: 120px;" required>
+								<input type="text" placeholder="email" name="email" style="width: 200px;" required>  
+								
 								<div style="display: flex;margin-top: 20px;">
 									<input class="cart-btn" style="margin: auto;" type="submit" value=" Buy Now">
 								</div>
@@ -89,7 +92,15 @@
 {% else %}
 <div style="min-height: 500px;display: flex;">
 	<p style="font-size: 70px;margin: auto;text-align: center;">{{unpip}}
-
 	</p></div>
+	<script type="text/javascript">
+		setTimeout(function Redirect() {
+		  window.location="{% url 'home' %}";
+		  
+	   },3500)
+	   
+	   
+	   Redirect();
+ </script>
 {% endif %}
 {% endblock %}

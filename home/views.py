@@ -1,9 +1,10 @@
 from http.client import HTTPResponse
+import re
 from django.shortcuts import render
 from django.http.response import HttpResponse, HttpResponseRedirect
 from .models import Product,Buy,Users
 from django.urls import reverse
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate,decorators
 def index(request):
     list_watch = Product.objects.all()[0:8]
     for i in list_watch:
@@ -35,7 +36,7 @@ def singerProduct(request,id):
     try:
         list_singerProduct = Product.objects.get(pk=id)
     except:
-        return render(request,'home/singerProduct.html',{'unpip':'Sản phẩm Này không còn tồn tại do Mặt Hàng này đã bị niêm phong!!!'})
+        return render(request,'home/singerProduct.html',{'unpip':'Sản Phẩm không tồn tại chuyển đến trang chủ trong giây lát.'})
     a = list_singerProduct.img.split(',')
     if request.POST:    
         quantily = request.POST['quantily']
@@ -43,9 +44,6 @@ def singerProduct(request,id):
         Sex = request.POST['Sex']
         Number = request.POST['Number']
         email = request.POST['email']
-        if list_singerProduct.stock < int(quantily):
-            ok = False     
-            return render(request,'home/singerProduct.html',{'singerProduct':list_singerProduct,'ims':a,'ok':ok,'UserName':UserName,'Sex':Sex,'Number':Number,'email':email})
         c = Users.objects.all()
         dem=0
         for i in c:
@@ -70,3 +68,26 @@ def showAll(request):
         a = i.img.split(',')
         i.imgs = a
     return render(request,'home/watches.html',{'list_watch':list_watch})
+def DeleteProduct(request,id):
+    list_singerProduct = Product.objects.get(pk=id)
+    list_singerProduct.delete()
+    return HttpResponseRedirect(reverse('singerProduct',args=(id,)))
+@decorators.login_required(login_url='login')
+def EditProduct(request,id):
+    list_singerProduct = Product.objects.get(pk=id)
+    if request.POST:
+        ProductName =request.POST['ProductName']
+        ProductCode = request.POST['ProductCode']
+        price = request.POST['price']
+        stock = request.POST['stock']
+        describe = request.POST['describe']
+        img = request.POST['img']
+        list_singerProduct.ProductName=ProductName
+        list_singerProduct.ProductCode=ProductCode
+        list_singerProduct.price = price
+        list_singerProduct.stock = stock
+        list_singerProduct.describe =describe
+        list_singerProduct.img = img
+        list_singerProduct.save()
+        return HttpResponseRedirect(reverse('singerProduct',args=(id,)))
+    return render(request,'EditProduct.html',{'list_singerProduct':list_singerProduct})
