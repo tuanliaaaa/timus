@@ -29,14 +29,23 @@
                 font-weight: 700;
             }
             </style>
+            {% if loi %}
+            <div style="display: flex;margin-bottom: 20px;">
+                <p style="margin: auto;font-size: 20px;">
+                    Mã Sản phẩm đã tồn tại vui lòng nhập lại
+                </p>
+               
+            </div>
+            {% endif %}
+            
             <form action="" method="post">
                 {% csrf_token %}
-            <div> <label id="c">ProductName</label><input type="text" name="ProductName"  id="a" required> </div>
-            <div><label id="c">ProductCode</label><input type="text" name="ProductCode"  id="a" required></div>
-            <div><label id="c">Price</label><input type="text" name="price"  id="a" required pattern="[1-9]{}" title="Vui lòng nhập giá trị số" ></div>
-            <div><label id="c">Stock</label><input type="text" name="stock"  id="a" required title="Vui lòng nhập giá trị số" pattern="[1-9]{}"></div>
-            <div><label id="c">Describe</label><input type="text" name="describe"  id="a" required></div>
-            <div><label id="c">Image</label><input type="text" name="img"  id="a" required></div>
+            <div> <label id="c">ProductName</label><input type="text" name="ProductName"  id="a" required value="{{ProductName}}"> </div>
+            <div><label id="c">ProductCode</label><input type="text" name="ProductCode"  id="a"  required></div>
+            <div><label id="c">Price</label><input type="text" name="price"  id="a" value="{{price}}" required pattern="[1-9]{}" title="Vui lòng nhập giá trị số" ></div>
+            <div><label id="c">Stock</label><input type="text" name="stock"  id="a" value="{{stock}}" required title="Vui lòng nhập giá trị số" pattern="[1-9]{}"></div>
+            <div><label id="c">Describe</label><input type="text" name="describe"  id="a" value="{{describe}}" required></div>
+            <div><label id="c">Image</label><input type="text" name="img"  id="a" value="{{img}}" required></div>
            
             <div>
                 <input type="submit" value="ADD" id="b" >

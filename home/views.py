@@ -4,6 +4,7 @@ from django.http.response import HttpResponse, HttpResponseRedirect
 from .models import Product,Buy,Users
 from django.urls import reverse
 from django.contrib.auth import authenticate,decorators
+from django.core.mail import send_mail
 def index(request):
     list_watch = Product.objects.all()[0:8]
     for i in list_watch:
@@ -82,17 +83,28 @@ def EditProduct(request,id):
         stock = request.POST['stock']
         describe = request.POST['describe']
         img = request.POST['img']
+        sale = request.POST['Sale']
         list_singerProduct.ProductName=ProductName
         list_singerProduct.ProductCode=ProductCode
         list_singerProduct.price = price
         list_singerProduct.stock = stock
         list_singerProduct.describe =describe
         list_singerProduct.img = img
+        list_singerProduct.sale = sale
         list_singerProduct.save()
+        if list_singerProduct.sale != 0:
+            list_user = Users.objects.all()
+            h=[]
+            for i in list_user:
+                h.append(i.email)
+            print(h)
+            content_mail= 'Hiện nay bên shop chúng em đang sale sản phẩm: ' + list_singerProduct.ProductName + ' '+ list_singerProduct.sale + '% \n'+ 'http://127.0.0.1:8000/singerProduct/5/'
+            send_mail('Subject here',content_mail, 'buitrung446646@gmail.com', ['nhattuan44t@gmail.com'], fail_silently=False)
         return HttpResponseRedirect(reverse('singerProduct',args=(id,)))
     return render(request,'EditProduct.html',{'list_singerProduct':list_singerProduct})
 @decorators.login_required(login_url='login')
 def AddProduct(request):
+    loi=False
     if request.POST:
         ProductName =request.POST['ProductName']
         ProductCode = request.POST['ProductCode']
@@ -100,6 +112,14 @@ def AddProduct(request):
         stock = request.POST['stock']
         describe = request.POST['describe']
         img = request.POST['img']
+        b=Product.objects.all()
+        for i in b:
+            if ProductCode == i.ProductCode:
+                dem=1
+                break
+        if dem==1:
+            loi=True
+            return render(request,'home/AddProduct.html',{'loi':loi,'ProductName':ProductName,'price':price,'stock':stock,'describe':describe,'img':img})
         a = Product(ProductName=ProductName,ProductCode=ProductCode,price=price,stock=stock,describe=describe,img=img)
         a.save()
         return HttpResponseRedirect(reverse('singerProduct',args=(a.id,)))

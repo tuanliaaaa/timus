@@ -67,8 +67,9 @@
                   <a href="{%  url 'card' %}">
                     <i class="fa fa-cart-plus" aria-hidden="true"></i>
                   <a>
+                    <a href=""><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
                   {% endif %}
-                  <div class="box" >
+                  <div class="box" style="margin-left: 15px;" >
                   <form name="search" action="{% url 'watch' %}" method="GET">
                       <input type="text" class="input" name="search" 
                       onmouseout="document.search.txt.value = ''">
@@ -78,7 +79,7 @@
                 </a>
                   {% if user.is_authenticated %}
                   <div style="height: 50px;width: 50px;margin-top: -17px;margin-left: 10px;">
-                    <img  style="border-radius: 50%;" src="https://scontent.fsgn2-1.fna.fbcdn.net/v/t39.30808-6/272807867_669874974031082_8247604913488167459_n.jpg?_nc_cat=111&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=mc5XLpoJmFEAX90NQ86&tn=wj7CHe713iSc7nnB&_nc_ht=scontent.fsgn2-1.fna&oh=00_AT8hVVILKzN2RB8cxPqYlLP7VN2hXFVTkY5MAR3S40RdgQ&oe=621BCEB2"> 
+                    <img  style="border-radius: 50%;" src="https://scontent.fhan2-2.fna.fbcdn.net/v/t39.30808-6/272807867_669874974031082_8247604913488167459_n.jpg?_nc_cat=111&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=bCI5lIIoRw0AX9AV0MN&tn=wj7CHe713iSc7nnB&_nc_ht=scontent.fhan2-2.fna&oh=00_AT-MuGl9ZU1_98BxOi2rWDeCAiOdPQ-QRUbaD8D2Z3orVg&oe=6221BD72"> 
                     <a href="{% url 'logout' %}" style="font-size: 13px;margin-left: -2px;font-weight: 900;font-family: -webkit-pictograph;">Logout</a>
                   </div>  
                   <div style="cursor: pointer;margin-top: -9px;">

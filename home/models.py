@@ -11,6 +11,7 @@ class Product(models.Model):
     stock = models.IntegerField()
     describe = models.CharField(max_length=500)
     img = models.CharField(max_length=10000)
+    sale = models.IntegerField(default=0)
 class Users(models.Model):
     UserName = models.CharField(max_length=100)
     Number = models.CharField(max_length=12)
