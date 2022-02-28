@@ -29,11 +29,25 @@
                   </span>
                 </h6>
               </div>
-              <div class="new">
-                <span>
-                  Featured
-                </span>
-              </div>
+              {% if watch.sale  %}
+                  
+                  <div class="new" style="background-color: red;">
+                    <span>
+                      
+                      Sale {{watch.sale}} %
+                      
+                    </span>
+                  </div>
+                  {% else %}
+                  <div class="new" >
+                    <span>
+                      
+                      Featured
+                      
+                    </span>
+                  </div>
+                  {% endif %}
+              
             </a>
           </div>
          

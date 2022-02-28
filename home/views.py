@@ -10,6 +10,7 @@ def index(request):
     for i in list_watch:
         a = i.img.split(',')
         i.imgs = a
+        i.price = int((100-i.sale)*i.price/100)
     return render(request,'home/index.html',{'list_watch':list_watch})
 def watches(request):
     if request.GET:
@@ -24,12 +25,14 @@ def watches(request):
         for i in list_watch:
             a = i.img.split(',')
             i.imgs = a
+            i.price = int((100-i.sale)*i.price/100)
         return render(request,'home/watches.html',{'list_watch':list_watch})
 def card(request):
     List_Buy = Buy.objects.order_by("-BuyTime").all()[0:5]
     for i in List_Buy:
         a = i.Product.img.split(',')
         i.Product.imgs = a
+        
     return render(request,'home/card.html',{'List_Buy':List_Buy})
 def singerProduct(request,id):
     ok=True
@@ -38,6 +41,8 @@ def singerProduct(request,id):
     except:
         return render(request,'home/singerProduct.html',{'unpip':'Sản Phẩm không tồn tại chuyển đến trang chủ trong giây lát.'})
     a = list_singerProduct.img.split(',')
+    if list_singerProduct.sale !=0 :
+        list_singerProduct.vcl = int((100-list_singerProduct.sale)*list_singerProduct.price/100)
     if request.POST:    
         quantily = request.POST['quantily']
         UserName = request.POST['UserName']
@@ -68,6 +73,7 @@ def showAll(request):
     for i in list_watch:
         a = i.img.split(',')
         i.imgs = a
+        i.price = int((100-i.sale)*i.price/100)
     return render(request,'home/watches.html',{'list_watch':list_watch})
 def DeleteProduct(request,id):
     list_singerProduct = Product.objects.get(pk=id)

@@ -28,7 +28,12 @@
 							</div>
 							{% endif %}
 						</div>
-						<p class="single-product-pricing"> ${{singerProduct.price}}</p>
+						{% if singerProduct.vcl %}
+						<p class="single-product-pricing" style="text-decoration: line-through;"> ${{singerProduct.price}} </p>
+						<p class="single-product-pricing">SALE:{{singerProduct.sale}}% : ${{singerProduct.vcl}}</p>
+						{% else %}
+						<p class="single-product-pricing" > ${{singerProduct.price}}</p>
+						{% endif %}
 						<p><span>Stock:</span>
 							{{singerProduct.stock}}
 						</p>
