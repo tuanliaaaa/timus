@@ -1,7 +1,9 @@
 {% extends 'home/base.html' %}
 {% load static %}
 {% block content %}
-
+<script>
+	var a=0
+</script>
 	<!-- cart -->
 	<div class="cart-section mt-150 mb-150">
 		<div class="container">
@@ -12,7 +14,7 @@
 							<thead class="cart-table-head">
 								<tr class="table-head-row">
 									<th class="product-image">Product Image</th>
-									<th class="product-name">Name</th>
+									<th class="product-name" >Name</th>
 									<th class="product-price">Price</th>
 									<th class="product-quantity">Buy-Time</th>
 									<th class="product-total">Total</th>
@@ -25,10 +27,17 @@
 									
 									<td class="product-image"><img src="{{Transaction.Product.imgs.0}}" alt="" style="height:auto"></td>
 									<td class="product-name">{{Transaction.Product.ProductName }}</td>
-									<td class="product-price">${{Transaction.Product.price}}</td>
+									<td class="product-price " >$<p class="p" style="display: inline-block;">{{Transaction.Product.price}}</p></td>
 									<td class="product-quantity">{{Transaction.BuyTime|date:"D d M Y"}}</td>
 									<td class="product-total">{{Transaction.quantily}}</td>
 									<td class="product-User">{{Transaction.Users.UserName}}</td>
+									<script>
+										
+										var h=document.getElementsByClassName('p')[a]
+
+										h.innerText={{Transaction.Product.price}}*{{Transaction.quantily}}
+										a++
+									</script>
 								</tr>
 								{% endfor %}
 								
@@ -41,4 +50,5 @@
 		<div onclick="exportData()" style="display:flex;"><p style="margin:auto;text-align:center; padding:10px 10px;background-color:#ccc;width:200px;margin-top:20px;border-radius:30px;cursor: pointer;">Download list</p></div>
 	</div>
 	<!-- end cart -->
+	
 {% endblock %}
