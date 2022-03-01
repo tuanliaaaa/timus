@@ -29,10 +29,10 @@
 							{% endif %}
 						</div>
 						{% if singerProduct.vcl %}
-						<p class="single-product-pricing" style="text-decoration: line-through;"> ${{singerProduct.price}} </p>
-						<p class="single-product-pricing">SALE:{{singerProduct.sale}}% : ${{singerProduct.vcl}}</p>
+						<p class="single-product-pricing" style="text-decoration: line-through;"> $<span id="lol2" style="display:inline-block;font-size: 32px;color:#051922;font-weight: 700;opacity: 1;">{{singerProduct.price}}</span></p>
+						<p class="single-product-pricing">SALE {{singerProduct.sale}}% : $<span id="lol" style="display:inline-block;font-size: 32px;color:#051922;font-weight: 700;opacity: 1;">{{singerProduct.vcl}}</span></p>
 						{% else %}
-						<p class="single-product-pricing" > ${{singerProduct.price}}</p>
+						<p class="single-product-pricing" > $<span id="lol2" style="display:inline-block;font-size: 32px;color:#051922;font-weight: 700;opacity: 1;">{{singerProduct.price}}</span></p>
 						{% endif %}
 						<p><span>Stock:</span>
 							{{singerProduct.stock}}
@@ -42,7 +42,7 @@
 						<div class="single-product-form">
 							<form action="" method=POST>
 								{% csrf_token %}
-								<input type="text" placeholder="0" name="quantily" style="width: 60px;"pattern="[1-9]" title="Vui lòng nhập số lượng sản phẩm lớn hơn 0" required>
+								<input type="text" id="soluong" placeholder="0" name="quantily" style="width: 60px;"pattern="[1-9]{}" title="Vui lòng nhập số lượng sản phẩm lớn hơn 0" required>
 								
 								<input type="text" placeholder="UserName" name="UserName" style="width: 160px;" required >
 								<input type="text" placeholder="sex" name="Sex" style="width: 60px;" required>
@@ -103,9 +103,26 @@
 		  window.location="{% url 'home' %}";
 		  
 	   },3500)
-	   
-	   
 	   Redirect();
+	
  </script>
 {% endif %}
+
+<script>
+	
+	var a= document.getElementById('soluong')
+	var b=document.getElementById('lol')
+	var c=document.getElementById('lol2')
+	a.oninput = function(e)
+	{
+		if(e.target.value!=0)
+		{% if singerProduct.vcl %}
+		{b.innerText=e.target.value*{{singerProduct.vcl}}}
+		{c.innerText=e.target.value*{{singerProduct.price}}}
+		{% else %}
+		{c.innerText=e.target.value*{{singerProduct.price}}}
+	{% endif %}
+	}
+	
+</script>
 {% endblock %}
