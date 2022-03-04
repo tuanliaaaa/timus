@@ -5,6 +5,8 @@ from .models import Product,Buy,Users
 from django.urls import reverse
 from django.contrib.auth import authenticate,decorators
 from django.core.mail import send_mail
+from django.db.models import Count,Sum
+import datetime
 def index(request):
     list_watch = Product.objects.all()[0:8]
     for i in list_watch:
@@ -130,3 +132,44 @@ def AddProduct(request):
         a.save()
         return HttpResponseRedirect(reverse('singerProduct',args=(a.id,)))
     return render(request,'home/AddProduct.html')
+@decorators.login_required(login_url='login')
+def manager(request):
+    if request.GET:
+        h= request.GET['DayStart']
+        k=request.GET['DayEnd']
+        p=h.split('/')
+        q=k.split('/')
+        dt1 = datetime.datetime(int(p[2]), int(p[1]), int(p[0]), 0, 0, 0,0)
+        dt2 = datetime.datetime(int(q[2]), int(q[1]), int(q[0]), 0, 0, 0,0)
+        dt2 = dt2 + datetime.timedelta(days=1)
+        b=int(request.GET['ChooseMode'])
+        a = Buy.objects.filter(BuyTime__gt=dt1,BuyTime__lt=dt2)
+        if b==1:
+            tongdoanhthu=0
+            for i in a:
+                tongdoanhthu+=i.quantily*i.Product.price
+            return render(request,'home/card.html',{'b':b,'tongdoanhthu':tongdoanhthu,'DayStart':h,'DayEnd':k})
+        elif b==2:
+            ListUser = Users.objects.filter(buy__BuyTime__gt=dt1,buy__BuyTime__lt=dt2).annotate(Count('buy__quantily')).order_by('-buy__quantily__count')[0:5]
+            return render(request,'home/card.html',{'b':b,'ListUser':ListUser,'DayStart':h,'DayEnd':k})
+        elif b==3:
+            ListProduct = Product.objects.filter(buy__BuyTime__gt=dt1,buy__BuyTime__lt=dt2).annotate(Sum('buy__quantily')).order_by('-buy__quantily__sum')[0:5]
+            for i in ListProduct:
+                a = i.img.split(',')
+                i.imgs = a
+                i.TotalMoney = i.price * i.buy__quantily__sum
+            return render(request,'home/card.html',{'b':b,'ListProduct':ListProduct,'DayStart':h,'DayEnd':k})
+        elif b==4:
+            List_Buy = Buy.objects.filter(BuyTime__gt=dt1,BuyTime__lt=dt2).order_by("-BuyTime").all()[0:5]
+            for i in List_Buy:
+                a = i.Product.img.split(',')
+                i.Product.imgs = a
+                i.TotalMoney = i.quantily * i.Product.price
+            return render(request,'home/card.html',{'b':b,'List_Buy':List_Buy,'DayStart':h,'DayEnd':k})
+    List_Buy = Buy.objects.order_by("-BuyTime").all()[0:5]
+    for i in List_Buy:
+        a = i.Product.img.split(',')
+        i.Product.imgs = a
+        i.TotalMoney = i.quantily * i.Product.price
+    return render(request,'home/card.html',{'List_Buy':List_Buy})
+  

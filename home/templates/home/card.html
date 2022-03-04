@@ -1,47 +1,143 @@
 {% extends 'home/base.html' %}
 {% load static %}
 {% block content %}
-<script>
-	var a=0
-</script>
+
 	<!-- cart -->
-	<div class="cart-section mt-150 mb-150">
+	<div style="display: flex;margin-top: 40px;">
+
+		<form  method="get" action="#" style="margin: auto;">
+			{% csrf_token %}
+			
+				<div  class="tblThongTinCaNhan" style="display:inline-block; margin-right: 25px;">
+						<label for="h">Từ ngày</label>
+						<input type="text" value ="{{DayStart}}" name="DayStart" id="txtNgayThangNamSinh" style="position: relative;" required/>
+				</div>
+				<div  class="tblThongTinCaNhan" style="display:inline-block;">
+					<label for ="">Đến ngày</label>
+					<input type="text" value ="{{DayEnd}}"name="DayEnd" id="stxtNgayThangNamSinh" style="position: relative;" required/>
+				</div>
+				<div  style="display: inline-block;margin-left: 25px;">
+					<label for="cars">Choose Mode</label>
+					<select id="cars" name="ChooseMode" style="border: 1px solid #ddd;border-radius: 5px;padding: 10px;height: 50px;margin-bottom: 15px;">
+					<option value="1"{% if b == 1 %}selected{% endif %}>Tổng doanh thu</option>
+					<option value="2"{% if b == 2 %}selected{% endif %}>User mua nhiều nhất</option>
+					<option value="3"{% if b == 3 %}selected{% endif %}>Hàng bán nhiều nhất</option>
+					<option value="4"{% if b == 4 or not b %}selected {% endif %}>Lịch sử giao dịch</option>
+					</select>
+				</div>
+			
+			<div style="display: flex">
+				<input type="submit" style="margin: auto;background-color: #ccc;font-weight: 400;">
+			</div>
+		</form>
+	</div>
+	<div class="cart-section mt-150 mb-150" style="margin-top: 20px;">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="cart-table-wrap">
 						<table class="cart-table" id="tblStocks">
-							<thead class="cart-table-head">
+							{% if not b %}
+							<thead class="cart-table-head">			
 								<tr class="table-head-row">
 									<th class="product-image">Product Image</th>
-									<th class="product-name" >Name</th>
-									<th class="product-price">Price</th>
-									<th class="product-quantity">Buy-Time</th>
+									<th class="product-name">Name</th>
+									<th class="product-price">Total Money</th>
+									<th class="product-Buy-time">Buy-Time</th>
 									<th class="product-total">Total</th>
 									<td class="product-User" style="text-align: center;">User</td>
 								</tr>
 							</thead>
 							<tbody>
 								{% for Transaction in List_Buy %}
-								<tr class="table-body-row" >
-									
+								<tr class="table-body-row" >		
 									<td class="product-image"><img src="{{Transaction.Product.imgs.0}}" alt="" style="height:auto"></td>
 									<td class="product-name">{{Transaction.Product.ProductName }}</td>
-									<td class="product-price " >$<p class="p" style="display: inline-block;">{{Transaction.Product.price}}</p></td>
-									<td class="product-quantity">{{Transaction.BuyTime|date:"D d M Y"}}</td>
+									<td class="product-price">${{Transaction.TotalMoney}}</td>
+									<td class="product-quantity">{{Transaction.BuyTime}}</td>
 									<td class="product-total">{{Transaction.quantily}}</td>
 									<td class="product-User">{{Transaction.Users.UserName}}</td>
-									<script>
-										
-										var h=document.getElementsByClassName('p')[a]
-
-										h.innerText={{Transaction.Product.price}}*{{Transaction.quantily}}
-										a++
-									</script>
 								</tr>
 								{% endfor %}
-								
 							</tbody>
+							{% elif b == 1 %}
+							<thead class="cart-table-head">
+								<tr class="table-head-row">
+									<th class="product-image">Value</th>
+									<th class="product-name">Total ($)</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr class="table-body-row" >
+									<td class="product-image">Tổng tiền</td>
+									<td class="product-name">{{tongdoanhthu}}</td>
+								</tr>
+							</tbody>
+							{% elif b == 2 %}
+							<thead class="cart-table-head">
+								<tr class="table-head-row">
+									<th class="User-Name">UserName</th>
+									<th class="User-Email">Email</th>
+									<th class="User-phone">Số Điện thoại</th>
+									<th class="User-buy">Số lần mua</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for user in ListUser %}
+								<tr class="table-body-row" >
+									<td class="User-Name">{{user.UserName}}</td>
+									<td class="User-Email">{{user.email}}</td>
+									<td class="User-phone">{{user.Number}}</td>
+									<td class="User-buy">{{user.buy__quantily__count}}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+							{% elif b == 3 %}
+							<thead class="cart-table-head">
+								<tr class="table-head-row">
+									<th class="product-image">Product Image</th>
+									<th class="product-name">Name</th>
+									<th class="product-price">Price</th>
+									<th class="product-quantity">Total quantilty</th>
+									<th class="product-total">Total Money</th>
+									
+								</tr>
+							</thead>
+							<tbody>
+								{% for Product in ListProduct %}
+								<tr class="table-body-row" >
+									<td class="product-image"><img src="{{Product.imgs.0}}" alt="" style="height:auto"></td>
+									<td class="product-name">{{Product.ProductName }}</td>
+									<td class="product-price">${{Product.price}}</td>
+									<td class="product-quantity">{{Product.buy__quantily__sum}}</td>
+									<td class="product-total">${{Product.TotalMoney}}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+							{% else %}
+							<thead class="cart-table-head">			
+								<tr class="table-head-row">
+									<th class="product-image">Product Image</th>
+									<th class="product-name">Name</th>
+									<th class="product-price">Total Money</th>
+									<th class="product-Buy-time">Buy-Time</th>
+									<th class="product-total">Total</th>
+									<td class="product-User" style="text-align: center;">User</td>
+								</tr>
+							</thead>
+							<tbody>
+								{% for Transaction in List_Buy %}
+								<tr class="table-body-row" >		
+									<td class="product-image"><img src="{{Transaction.Product.imgs.0}}" alt="" style="height:auto"></td>
+									<td class="product-name">{{Transaction.Product.ProductName }}</td>
+									<td class="product-price">${{Transaction.TotalMoney}}</td>
+									<td class="product-quantity">{{Transaction.BuyTime}}</td>
+									<td class="product-total">{{Transaction.quantily}}</td>
+									<td class="product-User">{{Transaction.Users.UserName}}</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+							{% endif %}
 						</table>
 					</div>
 				</div>
@@ -50,5 +146,25 @@
 		<div onclick="exportData()" style="display:flex;"><p style="margin:auto;text-align:center; padding:10px 10px;background-color:#ccc;width:200px;margin-top:20px;border-radius:30px;cursor: pointer;">Download list</p></div>
 	</div>
 	<!-- end cart -->
-	
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<!-- Liên kết thư viện JQUERY UI -->
+	<link href="{% static 'jquery-ui-1.12.1/jquery-ui.min.css' %}" type="text/css" rel="stylesheet" />
+	<script src="{% static 'jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
+	<!-- Viết code Jquery -->
+	<script>
+	  // Yêu cầu JQUERY UI thay thế INPUT text có id="txtNgayThangNamSinh" thành công cụ chọn ngày tháng Date Picker
+	  $('#txtNgayThangNamSinh').datepicker(
+		{
+		  showButtonPanel: true,    // option hiển thị nút "Today", "Done"
+		  dateFormat: 'dd/mm/yy'    // option Định dạng format ngày tháng; d: Day Ngày; m: Month tháng; y: Year năm
+		}
+	  );
+	  $('#stxtNgayThangNamSinh').datepicker(
+		{
+		  showButtonPanel: true,    // option hiển thị nút "Today", "Done"
+		  dateFormat: 'dd/mm/yy'    // option Định dạng format ngày tháng; d: Day Ngày; m: Month tháng; y: Year năm
+		}
+	  );
+	</script>
 {% endblock %}
