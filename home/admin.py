@@ -1,6 +1,6 @@
 from re import search
 from django.contrib import admin
-from .models import Product,Buy,Users
+from .models import Product,Buy,Users,ProductType
 # Register your models here.
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['ProductName','price']
@@ -10,3 +10,4 @@ class ProductAdmin(admin.ModelAdmin):
 admin.site.register(Product,ProductAdmin)
 admin.site.register(Buy)
 admin.site.register(Users)
+admin.site.register(ProductType)

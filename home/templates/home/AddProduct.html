@@ -46,7 +46,20 @@
             <div><label id="c">Stock</label><input type="text" name="stock"  id="a" value="{{stock}}" required title="Vui lòng nhập giá trị số" pattern="[1-9]{}"></div>
             <div><label id="c">Describe</label><input type="text" name="describe"  id="a" value="{{describe}}" required></div>
             <div><label id="c">Image</label><input type="text" name="img"  id="a" value="{{img}}" required></div>
-           
+            <label id ="c">ProductType</label>
+            <select name="ProductType" id="" style="width: 80%;
+            height: 60px;
+            display: inline-block;
+            float: right;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px; text-align: center;">
+                    
+                    {% for ProductType in listProductType %}
+                    <option id="a" value="{{ProductType.ProductTypeName}}" {% if ProductType.ProductTypeName == check %}selected{% endif %}>
+                        {{ProductType.ProductTypeName}}</option>
+                    {% endfor %}
+                </select>
             <div>
                 <input type="submit" value="ADD" id="b" >
             </div>

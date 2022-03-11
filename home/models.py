@@ -1,9 +1,13 @@
 import email
 from operator import mod
+from pickle import TRUE
+from types import CodeType
 from django.db import models
 from django.forms import EmailField
 
 # Create your models here.
+class ProductType(models.Model):
+    ProductTypeName = models.CharField(max_length=225)
 class Product(models.Model):
     ProductName = models.CharField(max_length=100)
     ProductCode = models.CharField(max_length=10)
@@ -12,6 +16,7 @@ class Product(models.Model):
     describe = models.CharField(max_length=500)
     img = models.CharField(max_length=10000)
     sale = models.IntegerField(default=0)
+    ProductType = models.ForeignKey(ProductType,on_delete=models.CASCADE)
 class Users(models.Model):
     UserName = models.CharField(max_length=100)
     Number = models.CharField(max_length=12)
@@ -22,3 +27,4 @@ class Buy(models.Model):
     Product =models.ForeignKey(Product,on_delete= models.CASCADE)
     quantily = models.IntegerField()
     BuyTime = models.DateTimeField(auto_now_add=True)
+

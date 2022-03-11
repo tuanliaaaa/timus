@@ -7,23 +7,24 @@
 
 		<form  method="get" action="#" style="margin: auto;">
 			{% csrf_token %}
-			
-				<div  class="tblThongTinCaNhan" style="display:inline-block; margin-right: 25px;">
+				
+				<div  id="start" class="tblThongTinCaNhan k" style="display:inline-block; margin-right: 25px;">
 						<label for="h">Từ ngày</label>
 						<input type="text" value ="{{DayStart}}" name="DayStart" id="txtNgayThangNamSinh" style="position: relative;" required/>
 				</div>
-				<div  class="tblThongTinCaNhan" style="display:inline-block;">
+				<div id="end" class="tblThongTinCaNhan k" style="display:inline-block;">
 					<label for ="">Đến ngày</label>
 					<input type="text" value ="{{DayEnd}}"name="DayEnd" id="stxtNgayThangNamSinh" style="position: relative;" required/>
 				</div>
 				<div  style="display: inline-block;margin-left: 25px;">
 					<label for="cars">Choose Mode</label>
-					<select id="cars" name="ChooseMode" style="border: 1px solid #ddd;border-radius: 5px;padding: 10px;height: 50px;margin-bottom: 15px;">
+					<select onchange="myFunction()" id="card" name="ChooseMode" style="border: 1px solid #ddd;border-radius: 5px;padding: 10px;height: 50px;margin-bottom: 15px;">
 					<option value="1"{% if b == 1 %}selected{% endif %}>Tổng doanh thu</option>
 					<option value="2"{% if b == 2 %}selected{% endif %}>User mua nhiều nhất</option>
 					<option value="3"{% if b == 3 %}selected{% endif %}>Hàng bán nhiều nhất</option>
 					<option value="4"{% if b == 4 or not b %}selected {% endif %}>Lịch sử giao dịch</option>
-					</select>
+					<option value="5"{% if b == 5 %}selected{% endif %}>Sản phẩm</option>
+				</select>
 				</div>
 			
 			<div style="display: flex">
@@ -114,7 +115,7 @@
 								</tr>
 								{% endfor %}
 							</tbody>
-							{% else %}
+							{% elif b == 4 %}
 							<thead class="cart-table-head">			
 								<tr class="table-head-row">
 									<th class="product-image">Product Image</th>
@@ -137,6 +138,37 @@
 								</tr>
 								{% endfor %}
 							</tbody>
+							{% else %}
+							<thead class="cart-table-head">			
+								<tr class="table-head-row">
+									<th class="product-image">Product Image</th>
+									<th class="product-name">Name</th>
+							
+								</tr>
+							</thead>
+							<tbody>
+								{% for Transaction in List_Product %}
+								<tr class="table-body-row" >		
+									<td class="product-image"><img src="{{Transaction.imgs.0}}" alt="" style="height:auto"></td>
+									<td class="product-name">{{Transaction.ProductName }}</td>
+									<td>
+										<a href="{% url 'EditProduct' Transaction.id %}">
+		
+											<input   type="button" style="margin-right: 10px;border-style: none;background-color: #F28123;font-weight: 700;text-transform: uppercase;font-size: 15px; border-radius: 25px; padding: 0 10px;" value="edit">
+										</a>
+									</td>
+									<td>
+										<a href="{% url 'DeleteProduct' Transaction.id %}">
+										<input  type="button" style="border-style: none;background-color: #F28123;font-weight: 700;text-transform: uppercase;font-size: 15px; border-radius: 25px;" value="delete">
+										</a>
+									
+									</td>
+								</tr>
+								
+								
+								{% endfor %}
+								
+							</tbody>
 							{% endif %}
 						</table>
 					</div>
@@ -151,6 +183,22 @@
 	<!-- Liên kết thư viện JQUERY UI -->
 	<link href="{% static 'jquery-ui-1.12.1/jquery-ui.min.css' %}" type="text/css" rel="stylesheet" />
 	<script src="{% static 'jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
+	<script>
+		function myFunction() {
+  		var x = document.getElementById("card").value;
+  		if(x==5)
+		  {
+			  document.getElementById('start').style.display = "none";
+			  document.getElementById('end').style.display = "none";
+		  }
+		else
+		{
+			document.getElementById('start').style.display = "inline-block";
+			document.getElementById('end').style.display = "inline-block";
+		}
+	}
+	
+	</script>
 	<!-- Viết code Jquery -->
 	<script>
 	  // Yêu cầu JQUERY UI thay thế INPUT text có id="txtNgayThangNamSinh" thành công cụ chọn ngày tháng Date Picker

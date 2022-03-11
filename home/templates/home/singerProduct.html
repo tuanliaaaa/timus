@@ -15,18 +15,7 @@
 					<div class="single-product-content">
 						<div style="margin-top: 10px;">
 							<h3 style="display: inline-block;">{{singerProduct.ProductName}}</h3>
-							{% if user.is_authenticated %}
-							<div style="float: right;">
-								<a href="{% url 'EditProduct' singerProduct.id %}">
-
-									<input   type="button" style="margin-right: 10px;border-style: none;background-color: #F28123;font-weight: 700;text-transform: uppercase;font-size: 15px; border-radius: 25px; padding: 0 10px;" value="edit">
-								</a>
-								<a href="{% url 'DeleteProduct' singerProduct.id %}">
-
-								<input  type="button" style="border-style: none;background-color: #F28123;font-weight: 700;text-transform: uppercase;font-size: 15px; border-radius: 25px;" value="delete">
-								</a>
-							</div>
-							{% endif %}
+							
 						</div>
 						{% if singerProduct.vcl %}
 						<p class="single-product-pricing" style="text-decoration: line-through;"> $<span id="lol2" style="display:inline-block;font-size: 32px;color:#051922;font-weight: 700;opacity: 1;">{{singerProduct.price}}</span></p>
@@ -102,7 +91,7 @@
 		setTimeout(function Redirect() {
 		  window.location="{% url 'home' %}";
 		  
-	   },3500)
+	   },2000)
 	   Redirect();
 	
  </script>
@@ -121,7 +110,8 @@
 		{c.innerText=e.target.value*{{singerProduct.price}}}
 		{% else %}
 		{c.innerText=e.target.value*{{singerProduct.price}}}
-	{% endif %}
+		
+		{% endif %}
 	}
 	
 </script>
