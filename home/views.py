@@ -86,7 +86,7 @@ def singerProduct(request,Type,id):
         b.save()
         list_singerProduct.stock-=int(quantily)
         list_singerProduct.save()
-        return HttpResponseRedirect(reverse('card',))
+        return HttpResponseRedirect(reverse('manager',))
     return render(request,'home/singerProduct.html',{'singerProduct':list_singerProduct,'ims':a,'ok':ok})
 #------------------------------End SingerProduct ------------------------
 
