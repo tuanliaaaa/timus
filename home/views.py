@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate,decorators
 from django.core.mail import send_mail
 from django.db.models import Count,Sum
 import datetime
+from django.core.files.storage import FileSystemStorage
 from django.http import request
 def Contact(request):
     if request.POST:
@@ -148,7 +149,10 @@ def AddProduct(request):
         price = request.POST['price']
         stock = request.POST['stock']
         describe = request.POST['describe']
-        img = request.POST['img']
+        uploaded_file1=request.FILES['img1']
+        uploaded_file2=request.FILES['img2']
+        uploaded_file3=request.FILES['img3']
+        uploaded_file4=request.FILES['img4']
         productType = request.POST['ProductType']
         k = ProductType.objects.get(ProductTypeName=productType)
         b=Product.objects.all()
@@ -160,6 +164,19 @@ def AddProduct(request):
         if dem==1:
             loi=True
             return render(request,'home/AddProduct.html',{'loi':loi,'ProductName':ProductName,'price':price,'stock':stock,'describe':describe,'img':img,'listProductType':listProductType,'check':productType})
+        fss1 = FileSystemStorage()
+        file1 = fss1.save(uploaded_file1.name, uploaded_file1)
+        file_url1 = fss1.url(file1)
+        fss2 = FileSystemStorage()
+        file2 = fss2.save(uploaded_file2.name, uploaded_file2)
+        file_url2 = fss2.url(file2)
+        fss3 = FileSystemStorage()
+        file3 = fss3.save(uploaded_file3.name, uploaded_file3)
+        file_url3 = fss3.url(file3)
+        fss4 = FileSystemStorage()
+        file4 = fss4.save(uploaded_file4.name, uploaded_file4)
+        file_url4 = fss1.url(file4)
+        img='http://127.0.0.1:8000'+file_url1+',http://127.0.0.1:8000'+file_url2+',http://127.0.0.1:8000'+file_url3+',http://127.0.0.1:8000'+file_url4
         a = Product(ProductName=ProductName,ProductCode=ProductCode,price=price,stock=stock,describe=describe,img=img,ProductType=k)
         a.save()
         return HttpResponseRedirect(reverse('singerProduct',args=(a.ProductType.ProductTypeName,a.id,)))
@@ -167,6 +184,7 @@ def AddProduct(request):
 # --------------Kết thúc phần sản phẩm ----------------
 
 # --------------------Quản lí--------------------------
+
 @decorators.login_required(login_url='login')
 def manager(request):
     if request.GET:
